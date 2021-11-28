@@ -14,7 +14,10 @@ import {
   execute_tribe_governance,
 } from "./governance/sim_tribe";
 import { Addresser } from "./util/addresser";
-import { execute_tribe_acquire } from "./governance/sim_acquire";
+import {
+  execute_tribe_execute,
+  execute_tribe_queue,
+} from "./governance/sim_acquire";
 
 const tribeHaverAddress = "0x28c6c06298d514db089934071355e5743bf21d60";
 const rgtHaverAddress = "0x20017a30d3156d4005bda08c40acda0a6ae209b1";
@@ -462,7 +465,8 @@ describe("tribe => fei swap", () => {
 
 describe("tribe claim contracts", () => {
   execute_tribe_acceptAdmin();
-  execute_tribe_acquire();
+  execute_tribe_queue();
+  execute_tribe_execute();
 
   it("contract disabled after", async () => {
     await expect(

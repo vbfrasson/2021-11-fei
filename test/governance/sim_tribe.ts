@@ -72,16 +72,16 @@ export const execute_tribe_governance = () => {
         Addresser.feiCoreAddress,
         Deployment.pegExchanger?.address,
         Deployment.tribeRagequit?.address,
-        //Addresser.feiCoreAddress,
+        Addresser.feiCoreAddress,
       ],
-      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
       [
         `0xeacdd9e8000000000000000000000000${pgnp}000000000000000000000000000000000000000000ee025a008530a464ed33d9`,
         `0x40c10f19000000000000000000000000${pgnp}00000000000000000000000000000000000000000000d3c21bcecceda1000000`,
         `0x261707fa000000000000000000000000${rqnp}`,
         Deployment.pegExchanger!.interface.encodeFunctionData("party1Accept"),
         Deployment.tribeRagequit!.interface.encodeFunctionData("party1Accept"),
-        //  `0xeacdd9e8000000000000000000000000${gfxnp}000000000000000000000000000000000000000000027B46536C66C8E3000000`,
+        `0xeacdd9e8000000000000000000000000${gfxnp}000000000000000000000000000000000000000000027B46536C66C8E3000000`,
       ],
       "mods asleep post sinks"
     ).catch(console.log);
