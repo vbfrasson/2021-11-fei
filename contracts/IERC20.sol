@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-/// @title interfact to interact with ERC20 tokens
+/// @title interface to interact with ERC20 tokens
 /// @author elee
 interface IERC20 {
     function mint(address account, uint256 amount) external;

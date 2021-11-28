@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-/// @title interfact to interact with Collateralization Oracle
+/// @title interface to interact with Collateralization Oracle
 /// @author elee
 interface IOracle {
     function pcvStats()
