@@ -226,7 +226,7 @@ contract TribeRagequit {
 
     function _startCountdown() internal {
         if (expirationBlock == 0) {
-            expirationBlock = block.number + 6400 * 3;
+            expirationBlock = block.number + 6400 * 3; // approx. 3 days in blocks
         }
     }
 }
