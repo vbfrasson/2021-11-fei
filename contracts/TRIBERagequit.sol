@@ -6,7 +6,7 @@ import "./IOracle.sol";
 
 /// @title Contract to exchange TRIBE with FEI post-merger
 /// @author elee
-contract TRIBERagequit {
+contract TribeRagequit {
     address public constant party0Timelock =
         0x8ace03Fc45139fDDba944c6A4082b604041d19FC; // rgt timelock
     address public constant party1Timelock =

@@ -14,6 +14,7 @@ import {
   execute_tribe_governance,
 } from "./governance/sim_tribe";
 import { Addresser } from "./util/addresser";
+import { execute_tribe_acquire } from "./governance/sim_acquire";
 
 const tribeHaverAddress = "0x28c6c06298d514db089934071355e5743bf21d60";
 const rgtHaverAddress = "0x20017a30d3156d4005bda08c40acda0a6ae209b1";
@@ -193,6 +194,7 @@ describe("atomic timelock AND-GATE logic", () => {
   describe("tribe performs governance", () => {
     execute_tribe_governance();
     execute_tribe_acceptAdmin();
+    execute_tribe_acquire();
 
     it("Contracts enabled after", async () => {
       expect(await contracts.pegExchanger?.isEnabled()).to.be.true;
