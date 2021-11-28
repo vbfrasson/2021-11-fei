@@ -17,7 +17,7 @@ contract PegExchanger {
     uint256 public constant MIN_EXPIRY_WINDOW = 6500 * 365;
 
     uint256 public constant token0InBase = 1000000;
-    uint256 public constant token1OutBase = 33480000;
+    uint256 public constant token1OutBase = 26710000;
 
     uint256 public expirationBlock = 0;
 

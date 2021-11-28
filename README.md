@@ -92,7 +92,18 @@ The other contract facilitates the token exchange of TRIBE to FEI, an option giv
 
 Both contracts require the timelocks of both DAOs to submit a transaction confirming that they want the contract to be activated, and only then may users exchange their RGT or claim their FEI. We can facilitate a trustless token buyout with the smart contract as an escrow with this system in place.
 
-Finally, there are three simulations that together describe a relatively trustless governance process.
+Also in scope for this competition, there are three simulations that together describe a relatively trustless governance process.
+
+Finally, we detail the process in which the merkle tree was generated, using the set of scripts in ./scripts/
+
+These produce output in the folder ./merkle/, each script producing output with matching numeric header
+
+Example output used to generate the existing merkle tree is in directory `./sample_merkle`
+
+To run from scratch, source each step in order with `npx hardhat run ./scripts/n_xyz.ts`
+
+Alternatively, then type `make merkle`. This script will resume from the latest completed step (indicated by prescence of file).
+
 
 ## Smart Contracts
 All the contracts in this section are to be reviewed. Any contracts not on this list are to be ignored for this contest.
