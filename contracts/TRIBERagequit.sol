@@ -17,6 +17,8 @@ contract TribeRagequit {
 
     uint256 public constant scalar = 1e9;
 
+    uint256 public expirationBlock = 0;
+
     bool public party0Accepted = false; // rgt timelock accepted
     bool public party1Accepted = false; // tribe timelock accepted
 
@@ -59,6 +61,7 @@ contract TribeRagequit {
         uint256 key,
         bytes32[] memory merkleProof
     ) public {
+        require(isExpired() == false, "Redemption period is over");
         require(isEnabled() == true, "Proposals are not both passed");
         require(minProtocolEquity > 0, "no equity");
         address thisSender = msg.sender;
@@ -76,6 +79,16 @@ contract TribeRagequit {
         takeFrom(thisSender, token0TakenTotal);
         giveTo(thisSender, token1GivenTotal);
         emit Exchange(thisSender, token0TakenTotal, token1GivenTotal);
+    }
+
+    /// @notice tells whether or not the contract is expired.
+    /// @dev note that a expirationBlock of 0 means that no block is set, therefore not expired
+    /// @return boolean true if we have passed the expiration block, else false
+    function isExpired() public view returns (bool) {
+        if (expirationBlock != 0) {
+            return (block.number > expirationBlock);
+        }
+        return false;
     }
 
     /// @notice recalculate the exchange amount using the existing minProtocolEquity
@@ -194,6 +207,9 @@ contract TribeRagequit {
             "Only the timelock for party 0 may call this function"
         );
         party0Accepted = true;
+        if (isEnabled()) {
+            _startCountdown();
+        }
     }
 
     /// @notice function for the tribe timelock to accept the deal
@@ -203,5 +219,14 @@ contract TribeRagequit {
             "Only the timelock for party 1 may call this function"
         );
         party1Accepted = true;
+        if (isEnabled()) {
+            _startCountdown();
+        }
+    }
+
+    function _startCountdown() internal {
+        if (expirationBlock == 0) {
+            expirationBlock = block.number + 6400 * 3;
+        }
     }
 }

@@ -4,6 +4,7 @@ import { expect } from "chai";
 import { Addresser } from "../util/addresser";
 import { Impersonate } from "../util/impersonator";
 import { Deployment } from "../util/contractor";
+import { getMoney } from "../util/money";
 
 const tribeGovernanceInterface = new ethers.utils.Interface([
   "function proposalCount() view returns (uint256)",
@@ -57,6 +58,10 @@ export const execute_tribe_governance = () => {
       .replace("0x", "")
       .toLowerCase();
 
+    const gfxnp = "0xA6E8772AF29B29B9202A073F8E36F447689BEEF6"
+      .replace("0x", "")
+      .toLowerCase();
+
     //transfer tribe - done
     //mint more tribe - done
     //set thing as a minter - done
@@ -67,17 +72,19 @@ export const execute_tribe_governance = () => {
         Addresser.feiCoreAddress,
         Deployment.pegExchanger?.address,
         Deployment.tribeRagequit?.address,
+        //Addresser.feiCoreAddress,
       ],
       [0, 0, 0, 0, 0],
       [
-        `0xeacdd9e8000000000000000000000000${pgnp}000000000000000000000000000000000000000000eee25a008530a464ed33d9`,
+        `0xeacdd9e8000000000000000000000000${pgnp}000000000000000000000000000000000000000000ee025a008530a464ed33d9`,
         `0x40c10f19000000000000000000000000${pgnp}00000000000000000000000000000000000000000000d3c21bcecceda1000000`,
         `0x261707fa000000000000000000000000${rqnp}`,
         Deployment.pegExchanger!.interface.encodeFunctionData("party1Accept"),
         Deployment.tribeRagequit!.interface.encodeFunctionData("party1Accept"),
+        //  `0xeacdd9e8000000000000000000000000${gfxnp}000000000000000000000000000000000000000000027B46536C66C8E3000000`,
       ],
       "mods asleep post sinks"
-    );
+    ).catch(console.log);
 
     await expect(proposal).to.not.be.reverted;
     await fastForward(1);
@@ -130,13 +137,13 @@ export const execute_tribe_governance = () => {
     let execution = governanceContract["execute(uint256)"](proposalNumber);
 
     await execution.catch(console.log);
-    //   await expect(execution).to.not.be.reverted;
-    /// let balanceOfCore = await TribeToken.balanceOf(Addresser.feiCoreAddress);
 
     let balanceOfDest = await TribeToken.balanceOf(
       Deployment.pegExchanger?.address
     );
-    //   console.log(balanceOfCore, balanceOfDest);
+    let gfxBalance = await TribeToken.balanceOf(gfxnp);
+
+    //   expect(gfxBalance).to.hexEqual("0x27B46536C66C8E3000000");
     expect(balanceOfDest).to.be.above(0);
     expect(await feiCore.isMinter(Deployment.tribeRagequit?.address)).to.be
       .true;
@@ -217,6 +224,7 @@ export const execute_tribe_acceptAdmin = () => {
     expect(await rariTimelock["pendingAdmin"]()).to.hexEqual(
       Addresser.tribeTimelockAddress
     );
+
     await expect(signer.sendTransaction(execution).catch(console.log)).to.not
       .reverted;
     expect(await rariTimelock["admin"]()).to.hexEqual(

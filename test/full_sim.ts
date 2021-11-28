@@ -30,6 +30,7 @@ let ganga: Array<SignerWithAddress>;
 const gangBase = BigFromN("1e22");
 
 const merkletree = createTree();
+showBody("root:", merkletree.getHexRoot());
 
 const first = async () => {
   [deployer, alice, bob, carol, dave, ethan] = await ethers.getSigners();
@@ -175,8 +176,8 @@ describe("atomic timelock AND-GATE logic", () => {
     expect(await contracts.tribeRagequit?.isEnabled()).to.be.false;
   });
 
-  describe("rari performs governance", async () => {
-    execute_rari_governance();
+  describe("tribe performs governance", async () => {
+    execute_tribe_governance();
     it("contracts still disabled after", async () => {
       expect(await contracts.pegExchanger?.isEnabled()).to.be.false;
       expect(await contracts.tribeRagequit?.isEnabled()).to.be.false;
@@ -191,11 +192,8 @@ describe("atomic timelock AND-GATE logic", () => {
     });
   });
 
-  describe("tribe performs governance", () => {
-    execute_tribe_governance();
-    execute_tribe_acceptAdmin();
-    execute_tribe_acquire();
-
+  describe("rari performs governance", () => {
+    execute_rari_governance();
     it("Contracts enabled after", async () => {
       expect(await contracts.pegExchanger?.isEnabled()).to.be.true;
       expect(await contracts.tribeRagequit?.isEnabled()).to.be.true;
@@ -251,6 +249,7 @@ describe("rgt => tribe swap", () => {
     }
   });
 });
+
 describe("tribe => fei swap", () => {
   it("protocol equity should be above zero", async () => {
     const equity = await contracts.tribeRagequit?.minProtocolEquity();
@@ -458,5 +457,16 @@ describe("tribe => fei swap", () => {
     expect(await getMoney(addr, Addresser.feiTokenAddress)).to.not.equal(
       startingFei.add(expectGiven)
     );
+  });
+});
+
+describe("tribe claim contracts", () => {
+  execute_tribe_acceptAdmin();
+  execute_tribe_acquire();
+
+  it("contract disabled after", async () => {
+    await expect(
+      contracts.tribeRagequit?.connect(alice).ngmi(1, 1, [])
+    ).to.be.revertedWith("Redemption period is over");
   });
 });

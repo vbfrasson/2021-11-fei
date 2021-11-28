@@ -14,7 +14,7 @@ contract PegExchanger {
     bool public party0Accepted = false; // rgt timelock accepted
     bool public party1Accepted = false; // tribe timelock accepted
 
-    uint256 public constant MIN_EXPIRY_WINDOW = 1;
+    uint256 public constant MIN_EXPIRY_WINDOW = 6500 * 365;
 
     uint256 public constant token0InBase = 1000000;
     uint256 public constant token1OutBase = 33480000;

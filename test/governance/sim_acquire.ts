@@ -11,7 +11,7 @@ const tribeGovernanceInterface = new ethers.utils.Interface([
   "function proposals(uint256 proposalId) view returns (uint256 id, address proposer, uint256 eta, uint256 startBlock, uint256 endBlock, uint256 forVotes, uint256 againstVotes, uint256 abstainVotes, bool canceled, bool executed)",
   "function queue(uint256 proposalId)",
   "function execute(uint256 proposalId)",
-  "function propose(address[] targets, uint256[] values, bytes[] calldatas, string description) returns (uint256)",
+  "function propose(address[] targets, uint256[] values,string[] signatures, bytes[] calldatas, string description) returns (uint256)",
   "function state(uint256 proposalID) view returns (uint8)",
   "event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, string[] signatures, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)",
 ]);
@@ -23,6 +23,7 @@ const tribeTimelockInterface = new ethers.utils.Interface([
 
 const ownableInterface = new ethers.utils.Interface([
   "function owner() view returns (address)",
+  "function transferOwnership(address a)",
 ]);
 
 export const execute_tribe_acquire = () => {
@@ -56,13 +57,13 @@ export const execute_tribe_acquire = () => {
         "transferOwnership(address)",
       ],
       [
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
-        "0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c",
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
+        `0x000000000000000000000000d51dba7a94e1adea403553a8235c302cebf41a3c`,
       ],
       "mods asleep post sinks"
     ).catch(console.log);
@@ -106,20 +107,18 @@ export const execute_tribe_acquire = () => {
       await voter.stop();
     }
     await imp.start();
-    await advanceBlockHeight(13000); // fast forward through voting period
-    await governanceContractTribe["queue(uint256)"](proposalNumber);
-    await fastForward(86400);
-
+    await advanceBlockHeight(19000); // fast forward through voting period
+    await governanceContractTribe["queue(uint256)"](proposalNumber).catch(
+      console.log
+    );
+    await fastForward(176400);
     await advanceBlockHeight(1); //after changing the time mine one block
-
-    let execution = await governanceContractTribe.populateTransaction[
+    let execute = await governanceContractTribe.populateTransaction[
       "execute(uint256)"
     ](proposalNumber);
-    const rariTimelock = new ethers.Contract(
-      Addresser.rgtTimelockAddress,
-      tribeTimelockInterface,
-      signer
-    );
+
+    await expect(signer.sendTransaction(execute).catch(console.log)).to.not.be
+      .reverted;
 
     for (const shouldbe of [
       "0x1FA69a416bCF8572577d3949b742fBB0a9CD98c7",
