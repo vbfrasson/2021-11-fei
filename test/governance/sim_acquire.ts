@@ -21,14 +21,6 @@ const tribeGovernanceInterface = new ethers.utils.Interface([
   "function state(uint256 proposalID) view returns (uint8)",
   "event ProposalCreated(uint256 proposalId, address proposer, address[] targets, uint256[] values, string[] signatures, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description)",
 ]);
-const rariGovernanceInterface = new ethers.utils.Interface([
-  "function proposalCount() view returns (uint256)",
-  "function castVote(uint256 proposalId, uint8 support)",
-  "function proposals(uint256 proposalId) view returns (uint256 id, address proposer, uint256 eta, uint256 startBlock, uint256 endBlock, uint256 forVotes, uint256 againstVotes, uint256 abstainVotes, bool canceled, bool executed)",
-  "function queue(uint256 proposalId)",
-  "function execute(uint256 proposalId)",
-  "function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) public returns (uint256)",
-]);
 const tribeTimelockInterface = new ethers.utils.Interface([
   "function admin() view returns (address a)",
   "function pendingAdmin() view returns (address a)",
@@ -277,9 +269,3 @@ export const execute_tribe_execute = () => {
     }
   });
 };
-
-execute_tribe_governance();
-execute_rari_governance();
-execute_tribe_acceptAdmin();
-execute_tribe_queue();
-execute_tribe_execute();
