@@ -98,9 +98,9 @@ Factors related to the process in the use of these contracts may also be conside
 
 There are three simulations within scope located within `./test/governance`. These simulations, when run in context, must be run in the following order:
 
-1. execute_tribe_governance
+1. propose_tribe_governance
 2. execute_rgt_governance
-3. execute_tribe_acceptAdmin
+3. execute_tribe_governance
 
 Tribe must be the first mover on governance by sending TRIBE to the PegExchanger and setting the Ragequit contract as minter. Both of these actions pose no loss to Tribe Governance if Rari does not vote YES on their side of the deal, for they can mint more TRIBE.
 
