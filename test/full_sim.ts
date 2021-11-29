@@ -222,7 +222,7 @@ describe("rgt => tribe swap", () => {
       "tribe"
     );
     expect(inbase).to.equal(1000000);
-    expect(outbase).to.equal(10000 * 3348);
+    expect(outbase).to.equal(26705673);
   });
   it(`wallets should be able to redeem at the correct ratio`, async () => {
     for (let i = 1; i < 6; i++) {
