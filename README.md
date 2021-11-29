@@ -102,7 +102,7 @@ There are three simulations within scope located within `./test/governance`. The
 2. execute_rgt_governance
 3. execute_tribe_governance
 
-Tribe must be the first mover on governance by sending TRIBE to the PegExchanger and setting the Ragequit contract as minter. Both of these actions pose no loss to Tribe Governance if Rari does not vote YES on their side of the deal, for they can mint more TRIBE.
+Tribe must be the first mover on governance by committing sending TRIBE to the PegExchanger and setting the Ragequit contract as minter. Both of these actions pose no loss to Tribe Governance if Rari does not vote YES on their side of the deal, for they can mint more TRIBE.
 
 If Rari was the first mover on governance, Tribe Governance could rug by simply voting "no" on the vote, then accepting adminship.
 
@@ -119,7 +119,6 @@ This simulation first creates a proposal to perform the following actions:
 5. calls method `party1Accept` on TribeRagequit
 6. sends TRIBE to GFX Labs.
 7. accepts adminship of rari timelock
-8. executes transfer of rari contracts
 
 #### execute_tribe_governance (`./test/governance/sim_tribe.ts`)
 This simulation executes the above proposal
@@ -130,7 +129,6 @@ This simulation executes the above proposal
 5. calls method `party1Accept` on TribeRagequit
 6. sends TRIBE to GFX Labs.
 7. accepts adminship of rari timelock
-8. executes transfer of rari contracts
 
 
 #### execute_rgt_governance (``/test/governance/sim_rari.ts`)
@@ -138,7 +136,7 @@ This simulation first creates a proposal to perform the following actions:
 1. set the pendingAdmin of the RgtTimelock contract to the TribeTimelock.
 2. calls method `party0Accept` on PegExchanger
 3. calls method `party0Accept` on TribeRagequit
-4. queues transfer of rari contracts
+4. transfer ownership of rari contracts
 
 It then simulates a voting period, after which the proposal is passed & executed.
 
