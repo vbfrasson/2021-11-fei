@@ -14,10 +14,6 @@ import {
   propose_tribe_governance,
 } from "./governance/sim_tribe";
 import { Addresser } from "./util/addresser";
-import {
-  execute_tribe_execute,
-  execute_tribe_queue,
-} from "./governance/sim_acquire";
 import { advanceBlockHeight, fastForward } from "./util/block";
 
 const tribeHaverAddress = "0x28c6c06298d514db089934071355e5743bf21d60";
