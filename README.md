@@ -7,10 +7,8 @@
 - Starts November 30, 2021 00:00 UTC
 - Ends December 2, 2021 23:59 UTC
 
-This repo will be made public before the start of the contest. (C4 delete this line when made public)
 
-
-# Code Arena: Tribe/RGT Merger
+# Code4rena: Tribe/RGT Merger
 #
 | Glossary|Description|Address|
 |-------------------------------|------------------------------------------------------|------------|
