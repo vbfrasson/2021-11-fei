@@ -122,7 +122,7 @@ Externally Calls:
      - method `transferFrom`
 
 
-#### TribeRagequit.sol (146 lines)
+#### TribeRagequit.sol (167 lines)
 Summary: Contract which allows previous TRIBE holders to swap their TRIBE for FEI at intrinsic value.
 
   - Only swaps TRIBE for accounts on the merkle root, up to their allotted  quantity
@@ -148,7 +148,7 @@ Exchangers will be left with an amount of dust equal to `balance % token0InBase`
 
 The most complicated part of this contract is the validation of the merkle tree. While the logic is ripped from OZ, there could still be issues within their implementation.
 
-Beyond that, both contracts are rather short (under 250 lines total), and so every piece of logic, regardless of how trivial, is and therefore should be thought of as incredibly critical.
+Beyond that, both contracts are rather short (~250 lines total), and so every piece of logic, regardless of how trivial, is and therefore should be thought of as incredibly critical.
 
 Factors related to the process in the use of these contracts may also be considered, such as but not limited to an attacker's ability to rehypothecate and infinitely exchange funds.
 
