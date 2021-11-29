@@ -102,11 +102,11 @@ There are three simulations within scope located within `./test/governance`. The
 2. execute_rgt_governance
 3. execute_tribe_governance
 
-Tribe must be the first mover on governance by committing sending TRIBE to the PegExchanger and setting the Ragequit contract as minter. Both of these actions pose no loss to Tribe Governance if Rari does not vote YES on their side of the deal, for they can mint more TRIBE.
+Tribe must be the first mover on governance by committing to sending TRIBE to the PegExchanger and setting the Ragequit contract as minter. Both of these actions pose no loss to Tribe Governance if Rari does not vote YES on their side of the deal, for they can mint more TRIBE.
 
 If Rari was the first mover on governance, Tribe Governance could rug by simply voting "no" on the vote, then accepting adminship.
 
-The Tribe Governance vote MUST be completed & passed before the RGT Governance vote to ensure that RGT Governance may vote "no" or even not propose if Tribe Governance does not make the first move.
+The Tribe Governance vote MUST be completed & passed before the RGT Governance vote to ensure that RGT Governance may vote "no" or even not propose if Tribe Governance does not make the first move. If RGT votes no, then the Tribe governance proposal will not be able to be executed, resulting in no tribe being sent to the exchanger, no minter being added, and no enabling of any contract. 
 
 An example of a full simulation containing token deployments can be found at `./test/full_sim.ts`
 
