@@ -10,14 +10,15 @@ import { BigFromN } from "./util/stringn";
 import { getAccountProof } from "../utils/merkle";
 import { execute_rari_governance } from "./governance/sim_rari";
 import {
-  execute_tribe_acceptAdmin,
   execute_tribe_governance,
+  propose_tribe_governance,
 } from "./governance/sim_tribe";
 import { Addresser } from "./util/addresser";
 import {
   execute_tribe_execute,
   execute_tribe_queue,
 } from "./governance/sim_acquire";
+import { advanceBlockHeight, fastForward } from "./util/block";
 
 const tribeHaverAddress = "0x28c6c06298d514db089934071355e5743bf21d60";
 const rgtHaverAddress = "0x20017a30d3156d4005bda08c40acda0a6ae209b1";
@@ -179,24 +180,26 @@ describe("atomic timelock AND-GATE logic", () => {
     expect(await contracts.tribeRagequit?.isEnabled()).to.be.false;
   });
 
-  describe("tribe performs governance", async () => {
-    execute_tribe_governance();
+  describe("tribe passes governance", async () => {
+    propose_tribe_governance();
+  });
+
+  describe("rari passes+executes governance", () => {
+    execute_rari_governance();
     it("contracts still disabled after", async () => {
       expect(await contracts.pegExchanger?.isEnabled()).to.be.false;
       expect(await contracts.tribeRagequit?.isEnabled()).to.be.false;
-
       await expect(
         contracts.pegExchanger?.connect(alice).exchange(1)
       ).to.be.revertedWith("Proposals are not both passed");
-
       await expect(
         contracts.tribeRagequit?.connect(alice).ngmi(1, 1, [])
       ).to.be.revertedWith("Proposals are not both passed");
     });
   });
 
-  describe("rari performs governance", () => {
-    execute_rari_governance();
+  describe("tribe executes governance", () => {
+    execute_tribe_governance();
     it("Contracts enabled after", async () => {
       expect(await contracts.pegExchanger?.isEnabled()).to.be.true;
       expect(await contracts.tribeRagequit?.isEnabled()).to.be.true;
@@ -463,12 +466,10 @@ describe("tribe => fei swap", () => {
   });
 });
 
-describe("tribe claim contracts", () => {
-  execute_tribe_acceptAdmin();
-  execute_tribe_queue();
-  execute_tribe_execute();
-
+describe("pass a few blocks", () => {
   it("contract disabled after", async () => {
+    await fastForward(10000);
+    await advanceBlockHeight(100000);
     await expect(
       contracts.tribeRagequit?.connect(alice).ngmi(1, 1, [])
     ).to.be.revertedWith("Redemption period is over");

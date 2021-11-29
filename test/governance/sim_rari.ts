@@ -4,6 +4,10 @@ import { expect } from "chai";
 import { Addresser } from "../util/addresser";
 import { Impersonate } from "../util/impersonator";
 import { Deployment } from "../util/contractor";
+import {
+  execute_tribe_governance,
+  propose_tribe_governance,
+} from "./sim_tribe";
 
 const rariGovernanceInterface = new ethers.utils.Interface([
   "function proposalCount() view returns (uint256)",
@@ -17,6 +21,8 @@ const rariGovernanceInterface = new ethers.utils.Interface([
 const rariTimelockInterface = new ethers.utils.Interface([
   "function admin() view returns (address a)",
   "function pendingAdmin() view returns (address a)",
+  "function queueTransaction(address target, uint value, string memory signature, bytes memory data, uint eta) returns (bytes32)",
+  "function executeTransaction(address target, uint value, string memory signature, bytes memory data, uint eta) payable returns (bytes)",
 ]);
 
 export const execute_rari_governance = () => {
@@ -39,17 +45,54 @@ export const execute_rari_governance = () => {
       rariTimelockInterface,
       signer
     );
+
     let currentTimelockAdmin = await timelockContract["pendingAdmin"]();
     expect(currentTimelockAdmin).to.hexEqual("0x00");
+
+    let contracts = [
+      Addresser.rgtTimelockAddress,
+      Deployment.pegExchanger?.address,
+      Deployment.tribeRagequit?.address,
+      "0x1FA69a416bCF8572577d3949b742fBB0a9CD98c7",
+      "0x66f4856f1bbd1eb09e1c8d9d646f5a3a193da569",
+      "0x59FA438cD0731EBF5F4cDCaf72D4960EFd13FCe6",
+      "0x3F4931A8E9D4cdf8F56e7E8A8Cfe3BeDE0E43657",
+      "0xD6e194aF3d9674b62D1b30Ec676030C23961275e",
+      "0xaFD2AaDE64E6Ea690173F6DE59Fc09F5C9190d74",
+      "0xB465BAF04C087Ce3ed1C266F96CA43f4847D9635",
+    ];
+    let values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let args: any = [
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      [],
+      [],
+
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+      ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32),
+    ];
+
+    let methods = [
+      "setPendingAdmin(address)",
+      "party0Accept()",
+      "party0Accept()",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+      "transferOwnership(address)",
+    ];
     await goveranceContract["propose"](
-      [
-        Addresser.rgtTimelockAddress,
-        Deployment.pegExchanger?.address,
-        Deployment.tribeRagequit?.address,
-      ],
-      [0, 0, 0],
-      ["setPendingAdmin(address)", "party0Accept()", "party0Accept()"],
-      [ethers.utils.zeroPad(Addresser.tribeTimelockAddress, 32), [], []],
+      contracts,
+      values,
+      methods,
+      args,
       "mods asleep post sinks"
     );
 
@@ -88,6 +131,8 @@ export const execute_rari_governance = () => {
     await advanceBlockHeight(1); //after changing the time mine one block
 
     await goveranceContract.execute(proposalId).catch(console.log);
+
+    await advanceBlockHeight(1); //after changing the time mine one block
 
     let proposalInfo = await goveranceContract["proposals"](proposalId);
 

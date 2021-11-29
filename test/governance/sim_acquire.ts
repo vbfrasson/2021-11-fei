@@ -3,12 +3,6 @@ import { ethers, network } from "hardhat";
 import { expect } from "chai";
 import { Addresser } from "../util/addresser";
 import { Impersonate } from "../util/impersonator";
-import { Deployment } from "../util/contractor";
-import { execute_rari_governance } from "./sim_rari";
-import {
-  execute_tribe_acceptAdmin,
-  execute_tribe_governance,
-} from "./sim_tribe";
 import { BigFromN } from "../util/stringn";
 
 const tribeGovernanceInterface = new ethers.utils.Interface([
