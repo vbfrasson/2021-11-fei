@@ -34,6 +34,7 @@ contract PegExchanger {
     /// @notice call to exchange held RGT with TRIBE
     /// @param multiplier the amount to scale the base exchange amounts by
     function exchange(uint256 multiplier) public {
+        // @audit isExpired and isEnabled dont need to explicitly use the boolean comparison.
         require(isExpired() == false, "Redemption period is over");
         require(isEnabled() == true, "Proposals are not both passed");
         require(msg.sender != address(this), "????");
@@ -85,6 +86,8 @@ contract PegExchanger {
         party0Accepted = true;
     }
 
+    // @audit missing acceptance0 event?
+
     /// @notice function for the tribe timelock to accept the deal
     function party1Accept() public {
         require(
@@ -93,6 +96,8 @@ contract PegExchanger {
         );
         party1Accepted = true;
     }
+
+    // @audit missing acceptance1 event?
 
     // Admin function
 
@@ -113,4 +118,6 @@ contract PegExchanger {
         );
         expirationBlock = blockNumber;
     }
+
+    /// @audit modifiers for party1Timelock and isEnabled(withouth the booleans)
 }

@@ -6,6 +6,10 @@ import "./IOracle.sol";
 
 /// @title Contract to exchange TRIBE with FEI post-merger
 /// @author elee
+
+/// @audit constants should be ALL_CAPS
+/// @audit variable types not efficiently declared.
+//         Variables of the same type should be declared sequentially.
 contract TribeRagequit {
     address public constant party0Timelock =
         0x8ace03Fc45139fDDba944c6A4082b604041d19FC; // rgt timelock
@@ -46,6 +50,7 @@ contract TribeRagequit {
     bytes32 public merkleRoot =
         0x0000000000000000000000000000000000000000000000000000000000000000;
 
+    /// @audit remove TODO's
     /// @dev TODO: hardcode root once final merkle root is calculated
     constructor(bytes32 root) {
         merkleRoot = root;
@@ -56,22 +61,24 @@ contract TribeRagequit {
     /// @param multiplier the amount to scale the base exchange amounts by
     /// @param key the amount of scaled TRIBE allocated to the caller in the merkle drop
     /// @param merkleProof a proof proving that the caller may redeem up to `key` amount of tribe
+    /// @audit literal boolean in require statements not needed.
+    /// @audit funciton can be made external
     function ngmi(
         uint256 multiplier,
         uint256 key,
-        bytes32[] memory merkleProof
+        bytes32[] memory merkleProof //@audit always use bytes instead of bytes[]
     ) public {
         require(isExpired() == false, "Redemption period is over");
         require(isEnabled() == true, "Proposals are not both passed");
         require(minProtocolEquity > 0, "no equity");
-        address thisSender = msg.sender;
+        address thisSender = msg.sender; // @audit unnecessary variable.
         require(
             verifyClaim(thisSender, key, merkleProof) == true,
             "invalid proof"
         );
         require(
             (claimed[thisSender] + multiplier) <= key,
-            "already ragequit all you tokens"
+            "already ragequit all you tokens" // @audit typo - your*
         );
         claimed[thisSender] = claimed[thisSender] + multiplier;
         uint256 token0TakenTotal = token0InBase * multiplier;
@@ -107,6 +114,7 @@ contract TribeRagequit {
 
     /// @notice query for the current minProtocolEquity. Update the value and call recalculate() if new low
     /// @return the new minProtocolEquity (unused)
+    // @audit literal boolenas are not necessary. line 126
     function requery() public returns (int256) {
         (
             uint256 _pcvValue, //  pcv value
@@ -162,6 +170,7 @@ contract TribeRagequit {
         returns (bytes32)
     {
         bytes32 computedHash = leaf;
+        /// @audit No check for array length, big array could cause DoS of gas limit
         for (uint256 i = 0; i < proof.length; i++) {
             bytes32 proofElement = proof[i];
             if (computedHash <= proofElement) {
