@@ -1,4 +1,5 @@
-# Fei Protocol contest details
+## - Quick and Dirty Audit: audit findings can be seen as @audit tags in the contracts.
+# Fei Protocol contest details 
 - $28,500 USDC main award pot
 - $1,500 USDC gas optimization award pot
 - Join [C4 Discord](https://discord.gg/code4rena) to register

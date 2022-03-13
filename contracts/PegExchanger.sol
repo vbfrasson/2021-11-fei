@@ -78,6 +78,8 @@ contract PegExchanger {
     }
 
     /// @notice function for the rari timelock to accept the deal
+    // @audit missing acceptance0 event
+
     function party0Accept() public {
         require(
             msg.sender == party0Timelock,
@@ -86,9 +88,9 @@ contract PegExchanger {
         party0Accepted = true;
     }
 
-    // @audit missing acceptance0 event?
-
     /// @notice function for the tribe timelock to accept the deal
+    // @audit missing acceptance1 event?
+
     function party1Accept() public {
         require(
             msg.sender == party1Timelock,
@@ -97,12 +99,11 @@ contract PegExchanger {
         party1Accepted = true;
     }
 
-    // @audit missing acceptance1 event?
-
     // Admin function
 
     /// @param blockNumber  the block number of which to set the expiration block of the contract to
     /// @notice the expiry block must be set to at least MIN_EXPIRY_WINDOW in the future.
+    // @audit missing event ?
     function setExpirationBlock(uint256 blockNumber) public {
         require(
             msg.sender == party1Timelock,

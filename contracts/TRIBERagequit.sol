@@ -170,7 +170,7 @@ contract TribeRagequit {
         returns (bytes32)
     {
         bytes32 computedHash = leaf;
-        /// @audit No check for array length, big array could cause DoS of gas limit
+        /// @audit No checks for array length, big array could cause DoS due to gas limit.
         for (uint256 i = 0; i < proof.length; i++) {
             bytes32 proofElement = proof[i];
             if (computedHash <= proofElement) {
@@ -193,6 +193,7 @@ contract TribeRagequit {
     /// @param amount the amount of FEI to mint to the target address
     function giveTo(address target, uint256 amount) internal {
         token1.mint(target, amount);
+        /// @audit check mint is sucessful?
     }
 
     /// @notice function which ultimately transfers the TRIBE
