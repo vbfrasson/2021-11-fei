@@ -1,4 +1,6 @@
-## - Quick and Dirty Audit: audit findings can be seen as @audit tags in the contracts.
+## QDA (Quick and Dirty Audit)
+- The audit findings can be seen as @audit tags in the contracts. There is no detailed report.
+- This audit is my own work and has been done for educational purposes only.
 # Fei Protocol contest details 
 - $28,500 USDC main award pot
 - $1,500 USDC gas optimization award pot
